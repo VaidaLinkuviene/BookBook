@@ -39,7 +39,7 @@ function App() {
            <Route path='/register' element={ <Register />}/>
            <Route path='/profile' element={ <AuthRoute><Profile /> </AuthRoute>}/>
            <Route path='/user' element={<AuthRoute><BoardUser /></AuthRoute>}/>
-           <Route path="/" element={ <CategoriesTable />}/>
+           <Route path="/" element={ <Login />}/>
              <Route path="/add-category" element={<AuthAdminRoute><AddCategory /></AuthAdminRoute>} />
              <Route path="/edit-category/:name" element={<AuthAdminRoute><AddCategory/></AuthAdminRoute>} />
              <Route path='/category/:name/book' element={<BookTable />} />  

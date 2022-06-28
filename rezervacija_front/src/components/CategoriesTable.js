@@ -8,7 +8,7 @@ import { Link} from 'react-router-dom'
 import swal from 'sweetalert';
 import UserService from '../services/User.service';
 
-function CategoriesTable(record) {
+function CategoriesTable() {
 
   const [category, setCategory] = useState([]);
   const[users, setUsers] = useState([]);
@@ -30,17 +30,15 @@ const getAllCategories=()=>{
   }
 
 const handleDelete=(categoryName=>{
-  if(record.username == "admin") {
-    console.log(getAdmin);
-} else {
   CategoryService.deleteCategory(categoryName).then((response) => {
   getAllCategories();
   
 }).catch(error => {
   console.log(error)
 })
-  }
 })
+
+
 
 
 
