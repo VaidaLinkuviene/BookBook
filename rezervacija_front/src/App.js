@@ -19,6 +19,14 @@ const AuthRoute = ({ children }) => {
   return children;
 };
 
+const AuthAdminRoute = ({children }) => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if(user.username !== "admin") {
+    return <Navigate to="/" replace/>
+  }
+  return children;
+}
+
 function App() {
   return (
     <div>
@@ -29,14 +37,14 @@ function App() {
            {/* <Route path='/home' element={ <Home />}/> */}
            <Route path='/login' element={ <Login />}/>
            <Route path='/register' element={ <Register />}/>
-           <Route path='/profile' element={ <Profile />}/>
-           <Route path='/user' element={<BoardUser />}/>
-           <Route path="/" element={ <CategoriesTable />}/>
-             <Route path="/add-category" element={<AddCategory />} />
-             <Route path="/edit-category/:name" element={<AddCategory/>} />
+           <Route path='/profile' element={ <AuthRoute><Profile /> </AuthRoute>}/>
+           <Route path='/user' element={<AuthRoute><BoardUser /></AuthRoute>}/>
+           <Route path="/" element={ <Login />}/>
+             <Route path="/add-category" element={<AuthAdminRoute><AddCategory /></AuthAdminRoute>} />
+             <Route path="/edit-category/:name" element={<AuthAdminRoute><AddCategory/></AuthAdminRoute>} />
              <Route path='/category/:name/book' element={<BookTable />} />  
-             <Route path="/category/:catName/add-book" element={<AddBook />} />
-             <Route path="/category/:catName/book/:id" element={<AddBook/>} />
+             <Route path="/category/:catName/add-book" element={<AuthAdminRoute><AddBook /></AuthAdminRoute>} />
+             <Route path="/category/:catName/book/:id" element={<AuthAdminRoute><AddBook/></AuthAdminRoute>} />
 
                  <Route path="/category/:categoryName/book" element={ <BookTable />}/>
 

@@ -29,7 +29,7 @@ function Header() {
           {currentUser && (
             <li className="nav-item">
               <Link to={"/"} className="nav-link">
-                Užsisakyti
+                Knygų lentelė
               </Link>
             </li>
           )}

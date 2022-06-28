@@ -3,7 +3,8 @@ package net.vaida.controller;
 
 	import org.springframework.beans.factory.annotation.Autowired;
 	import org.springframework.http.HttpStatus;
-	import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.CrossOrigin;
 	import org.springframework.web.bind.annotation.DeleteMapping;
 	import org.springframework.web.bind.annotation.GetMapping;
 	import org.springframework.web.bind.annotation.PathVariable;
@@ -33,8 +34,9 @@ package net.vaida.controller;
 		@Autowired
 		CategoryRepository categoryRepo;
 
+		@Secured({"ROLE_USER" })
 		@GetMapping("/category/{categoryName}/book")
-		public List<Book> getAllMealsByCategoryName(@PathVariable("categoryName") String categoryName) {
+		public List<Book> getAllBooksByCategoryName(@PathVariable("categoryName") String categoryName) {
 			if (!categoryRepo.existsByCategoryName(categoryName)){
 			throw new CategoryNotFoundException();
 		}
@@ -42,20 +44,22 @@ package net.vaida.controller;
 	        return bookRepo.findByCategory(category);   
 		
 		}
-
+		@Secured({"ROLE_USER" })
 		@GetMapping("/category/{category}/book/{id}")
 		public Book getBooksById(@PathVariable("id") Long id) {
 			return bookRepo.findById(id).orElseThrow(() -> new BooksNotFoundException());
 		}
 		
+		@Secured({"ROLE_USER" })
 		@GetMapping("/book")
-		public List<Book> getAllMeals() {
+		public List<Book> getAllBooks() {
 			return bookRepo.findAll();
 		}
 
-		@PostMapping("/category/{categoryName}/meal")
+		@Secured({"ROLE_ADMIN" })
+		@PostMapping("/category/{categoryName}/book")
 		@ResponseStatus(HttpStatus.CREATED)
-		public Book createBook(@PathVariable(value = "categoryName") String categoryName, @RequestBody Book book) {
+		public Book createBook(@PathVariable(value = "categoryName") String categoryName, @RequestBody BookDTO book) {
 			if(!categoryRepo.existsByCategoryName(categoryName)) {
 				throw new CategoryNotFoundException();
 			}
@@ -70,20 +74,22 @@ package net.vaida.controller;
 			return bookRepo.save(b);
 		}
 
-		@PutMapping("/category/{category}/mbook/{id}")
-		public Book updateMeal(@PathVariable("id") long id, @RequestBody BookDTO mealDTO) {
-			Book meal = bookRepo.findById(id).orElseThrow(()-> new BooksNotFoundException());
-				meal.setName(mealDTO.getName());
-				meal.setDescription(mealDTO.getDescription());
-				meal.setISBN(mealDTO.getISBN());
-				meal.setImage(mealDTO.getImage());
-				meal.setPages(mealDTO.getPages());
-				return bookRepo.save(meal);
+		@Secured({"ROLE_ADMIN" })
+		@PutMapping("/category/{category}/book/{id}")
+		public Book updateBook(@PathVariable("id") long id, @RequestBody BookDTO bookDTO) {
+			Book book = bookRepo.findById(id).orElseThrow(()-> new BooksNotFoundException());
+			book.setName(bookDTO.getName());
+			book.setDescription(bookDTO.getDescription());
+			book.setISBN(bookDTO.getISBN());
+			book.setImage(bookDTO.getImage());
+			book.setPages(bookDTO.getPages());
+				return bookRepo.save(book);
 		}
 
-		@DeleteMapping("/category/{category}/meal/{id}")
+		@Secured({"ROLE_ADMIN" })
+		@DeleteMapping("/category/{category}/book/{id}")
 		@ResponseStatus(HttpStatus.NO_CONTENT)
-		public void deleteMeal(@PathVariable("id") Long id) {
+		public void deleteBook(@PathVariable("id") Long id) {
 			if (!bookRepo.existsById(id)) {
 				throw new BooksNotFoundException();
 			}

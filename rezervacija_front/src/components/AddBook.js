@@ -8,16 +8,16 @@ export default function AddBook() {
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [price, setPrice] = useState(0);
+  const [isbn, setIsbn] = useState(0);
   const [image, setImage] = useState('');
-  const [amount, setAmount] = useState(0);
+  const [pages, setPages] = useState(0);
   const [categoryName, setCategoryName] = useState('');
 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const book = { name, description, price, image, amount };
+    const book = { name, description, isbn, image, pages };
 
     if (id && catName) {
       BookService.updateBook(id, catName, book).then((response) => {
@@ -26,7 +26,7 @@ export default function AddBook() {
         console.log(error);
       });
     } else {
-     BookService.createBook(categoryName, book).then((response) => {
+    BookService.createBook(categoryName, book).then((response) => {
         console.log(response.data)
         setCategoryName(response.data.categoryName);
         navigate(`/category/${categoryName}/book`)
@@ -44,9 +44,9 @@ export default function AddBook() {
         if (book.id === Number(id)) {
           setName(book.name);
           setDescription(book.description);
-          setPrice(book.price);
+          setIsbn(book.isbn);
           setImage(book.image);
-          setAmount(book.amount);
+          setPages(book.pages);
           setCategoryName(catName);
         }
       });
@@ -57,7 +57,7 @@ export default function AddBook() {
 
   const title = () => {
     if (id && catName) {
-      return <h3 className='text-center'>Keisti knygos inforaciją</h3>
+      return <h3 className='text-center'>Keisti knygos informaciją</h3>
     } else {
       return <h3 className='text-center'>Pridėti knygą</h3>
     }
@@ -74,7 +74,7 @@ export default function AddBook() {
               <form onSubmit={(e) => handleSubmit(e)}>
                 
                 <div className='form-group mb-2'>
-                  <label className='form-label'>Knyga: </label>
+                  <label className='form-label'>Knygos pavadinimas: </label>
                   <input type="text" required placeholder='Įveskite knygos pavadinimą' name='bookName' className='form-control' value={name}
                     onChange={(e) => setName(e.target.value)} />
                 </div>
@@ -86,9 +86,9 @@ export default function AddBook() {
                 </div>
 
                 <div className='form-group mb-2'>
-                  <label className='form-label'>Kaina: </label>
-                  <input type="text" required placeholder='Įveskite kainą' name='price' className='form-control' value={price}
-                    onChange={(e) => setPrice(e.target.value)} />
+                  <label className='form-label'>ISBN: </label>
+                  <input type="number" required placeholder='Įveskite ISBN' name='isbn' className='form-control' value={isbn}
+                    onChange={(e) => setIsbn(e.target.value)} />
                 </div>
 
                 <div className='form-group mb-2'>
@@ -98,9 +98,9 @@ export default function AddBook() {
                 </div>
 
                 <div className='form-group mb-2'>
-                  <label className='form-label'>Kiekis: </label>
-                  <input type="text" required placeholder='Įveskite kiekį' name='amount' className='form-control' value={amount}
-                    onChange={(e) => setAmount(e.target.value)} />
+                  <label className='form-label'>Puslapių skaičius: </label>
+                  <input type="text" required placeholder='Įveskite puslapių skaičių' name='pages' className='form-control' value={pages}
+                    onChange={(e) => setPages(e.target.value)} />
                 </div>
 
                 <div className='form-group mb-2'>

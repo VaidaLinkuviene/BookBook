@@ -7,7 +7,7 @@ import BookService from '../services/BookService';
 import { Link, useParams } from 'react-router-dom'
 import swal from 'sweetalert';
 
-function BooksTable() {
+function BookTable() {
 
 
   const [books, setBooks] = useState([]);
@@ -18,7 +18,7 @@ function BooksTable() {
   // useEffect(()=>handleDelete(),[]);
 
   const getAllBooksByCategoryName = (categoryName) => {
-    BookService.getAllBooksByCategoryName(categoryName).then((response) => {
+   BookService.getAllBooksByCategoryName(categoryName).then((response) => {
       setBooks(response.data);
       console.log(response.data);
     }).catch(error => {
@@ -46,10 +46,10 @@ function BooksTable() {
           <tr key={books.id} >
             <th>ID</th>
             <th>Pavadinimas</th>
-            <th>Aprašymas</th>
-            <th>Kaina</th>
+            <th>Santrauka</th>
+            <th>ISBN</th>
             <th>Nuotrauka</th>
-            <th>Kiekis</th>
+            <th>Puslapių skaičius</th>
             <th>Veiksmas</th>
           </tr>
         </thead>
@@ -76,4 +76,4 @@ function BooksTable() {
   )
 }
 
-export default BooksTable
+export default BookTable

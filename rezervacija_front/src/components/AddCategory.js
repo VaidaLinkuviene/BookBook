@@ -7,6 +7,8 @@ export default function AddCategory() {
     const [categoryName, setCategoryName] = useState('');
     const navigate = useNavigate();
     const {name} = useParams();
+    const [users, setUsers] = useState([]);
+
 
 
     const handleSubmit = (e) =>{
