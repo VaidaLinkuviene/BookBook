@@ -33,8 +33,9 @@ package net.vaida.controller;
 		@Autowired
 		CategoryRepository categoryRepo;
 
+		
 		@GetMapping("/category/{categoryName}/book")
-		public List<Book> getAllMealsByCategoryName(@PathVariable("categoryName") String categoryName) {
+		public List<Book> getAllBooksByCategoryName(@PathVariable("categoryName") String categoryName) {
 			if (!categoryRepo.existsByCategoryName(categoryName)){
 			throw new CategoryNotFoundException();
 		}
@@ -49,13 +50,13 @@ package net.vaida.controller;
 		}
 		
 		@GetMapping("/book")
-		public List<Book> getAllMeals() {
+		public List<Book> getAllBooks() {
 			return bookRepo.findAll();
 		}
 
-		@PostMapping("/category/{categoryName}/meal")
+		@PostMapping("/category/{categoryName}/book")
 		@ResponseStatus(HttpStatus.CREATED)
-		public Book createBook(@PathVariable(value = "categoryName") String categoryName, @RequestBody Book book) {
+		public Book createBook(@PathVariable(value = "categoryName") String categoryName, @RequestBody BookDTO book) {
 			if(!categoryRepo.existsByCategoryName(categoryName)) {
 				throw new CategoryNotFoundException();
 			}
@@ -70,20 +71,20 @@ package net.vaida.controller;
 			return bookRepo.save(b);
 		}
 
-		@PutMapping("/category/{category}/mbook/{id}")
-		public Book updateMeal(@PathVariable("id") long id, @RequestBody BookDTO mealDTO) {
-			Book meal = bookRepo.findById(id).orElseThrow(()-> new BooksNotFoundException());
-				meal.setName(mealDTO.getName());
-				meal.setDescription(mealDTO.getDescription());
-				meal.setISBN(mealDTO.getISBN());
-				meal.setImage(mealDTO.getImage());
-				meal.setPages(mealDTO.getPages());
-				return bookRepo.save(meal);
+		@PutMapping("/category/{category}/book/{id}")
+		public Book updateBook(@PathVariable("id") long id, @RequestBody BookDTO bookDTO) {
+			Book book = bookRepo.findById(id).orElseThrow(()-> new BooksNotFoundException());
+			book.setName(bookDTO.getName());
+			book.setDescription(bookDTO.getDescription());
+			book.setISBN(bookDTO.getISBN());
+			book.setImage(bookDTO.getImage());
+			book.setPages(bookDTO.getPages());
+				return bookRepo.save(book);
 		}
 
-		@DeleteMapping("/category/{category}/meal/{id}")
+		@DeleteMapping("/category/{category}/book/{id}")
 		@ResponseStatus(HttpStatus.NO_CONTENT)
-		public void deleteMeal(@PathVariable("id") Long id) {
+		public void deleteBook(@PathVariable("id") Long id) {
 			if (!bookRepo.existsById(id)) {
 				throw new BooksNotFoundException();
 			}

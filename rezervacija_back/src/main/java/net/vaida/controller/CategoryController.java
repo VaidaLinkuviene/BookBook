@@ -4,7 +4,8 @@ package net.vaida.controller;
 
 	import org.springframework.beans.factory.annotation.Autowired;
 	import org.springframework.http.HttpStatus;
-	import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.CrossOrigin;
 	import org.springframework.web.bind.annotation.DeleteMapping;
 	import org.springframework.web.bind.annotation.GetMapping;
 	import org.springframework.web.bind.annotation.PathVariable;
@@ -34,11 +35,13 @@ package net.vaida.controller;
 			this.repo = repo;
 		}
 
+		@Secured({"ROLE_USER" })
 		@GetMapping("/category")
 		public List<Category> getAllCategories() {
 			return repo.findAll();
 		}
 
+		@Secured({"ROLE_USER" })
 		@GetMapping("/category/{category}")
 		public Category getFoodCategoryByCategoryName(@PathVariable("category") String categoryName) {
 			if (!repo.existsByCategoryName(categoryName)) {
@@ -58,7 +61,7 @@ package net.vaida.controller;
 //			}
 //		}
 
-
+		@Secured({"ROLE_ADMIN" })
 		@PostMapping("/category")
 		@ResponseStatus(HttpStatus.CREATED)
 		public Category createCategory(@RequestBody CategoryDTO categoryDTO) {
@@ -71,6 +74,7 @@ package net.vaida.controller;
 			return repo.save(category);
 		}
 
+		@Secured({"ROLE_ADMIN" })
 		@PutMapping("/category/{category}")
 		public Category updateFoodCategory(@PathVariable("category") String categoryName,
 				@RequestBody CategoryDTO categoryDTO) {
@@ -82,6 +86,7 @@ package net.vaida.controller;
 			return repo.save(cat);
 		}
 
+		@Secured({"ROLE_ADMIN" })
 		@DeleteMapping("/category/{category}")
 		@ResponseStatus(HttpStatus.NO_CONTENT)
 		public void deleteFoodCategoryByCategoryName(@PathVariable("category") String categoryName) {
