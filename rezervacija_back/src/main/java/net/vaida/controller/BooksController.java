@@ -3,7 +3,8 @@ package net.vaida.controller;
 
 	import org.springframework.beans.factory.annotation.Autowired;
 	import org.springframework.http.HttpStatus;
-	import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.CrossOrigin;
 	import org.springframework.web.bind.annotation.DeleteMapping;
 	import org.springframework.web.bind.annotation.GetMapping;
 	import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +34,7 @@ package net.vaida.controller;
 		@Autowired
 		CategoryRepository categoryRepo;
 
-		
+		@Secured({"ROLE_USER" })
 		@GetMapping("/category/{categoryName}/book")
 		public List<Book> getAllBooksByCategoryName(@PathVariable("categoryName") String categoryName) {
 			if (!categoryRepo.existsByCategoryName(categoryName)){
@@ -43,17 +44,19 @@ package net.vaida.controller;
 	        return bookRepo.findByCategory(category);   
 		
 		}
-
+		@Secured({"ROLE_USER" })
 		@GetMapping("/category/{category}/book/{id}")
 		public Book getBooksById(@PathVariable("id") Long id) {
 			return bookRepo.findById(id).orElseThrow(() -> new BooksNotFoundException());
 		}
 		
+		@Secured({"ROLE_USER" })
 		@GetMapping("/book")
 		public List<Book> getAllBooks() {
 			return bookRepo.findAll();
 		}
 
+		@Secured({"ROLE_ADMIN" })
 		@PostMapping("/category/{categoryName}/book")
 		@ResponseStatus(HttpStatus.CREATED)
 		public Book createBook(@PathVariable(value = "categoryName") String categoryName, @RequestBody BookDTO book) {
@@ -71,6 +74,7 @@ package net.vaida.controller;
 			return bookRepo.save(b);
 		}
 
+		@Secured({"ROLE_ADMIN" })
 		@PutMapping("/category/{category}/book/{id}")
 		public Book updateBook(@PathVariable("id") long id, @RequestBody BookDTO bookDTO) {
 			Book book = bookRepo.findById(id).orElseThrow(()-> new BooksNotFoundException());
@@ -82,6 +86,7 @@ package net.vaida.controller;
 				return bookRepo.save(book);
 		}
 
+		@Secured({"ROLE_ADMIN" })
 		@DeleteMapping("/category/{category}/book/{id}")
 		@ResponseStatus(HttpStatus.NO_CONTENT)
 		public void deleteBook(@PathVariable("id") Long id) {

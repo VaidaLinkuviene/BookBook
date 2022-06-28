@@ -6,14 +6,19 @@ import CategoryService from '../services/CategoryService'
 import BookService from '../services/BookService';
 import { Link} from 'react-router-dom'
 import swal from 'sweetalert';
+import UserService from '../services/User.service';
 
-function CategoriesTable() {
+function CategoriesTable(record) {
 
   const [category, setCategory] = useState([]);
+  const[users, setUsers] = useState([]);
 
   useEffect(()=>getAllCategories(),[]);
   // useEffect(()=>handleDelete(),[]);
   
+  let getAdmin =  users.find(obj => {
+    return obj.username === "admin";
+  })
 
 const getAllCategories=()=>{
     CategoryService.getAllCategories().then((response) => {
@@ -25,12 +30,18 @@ const getAllCategories=()=>{
   }
 
 const handleDelete=(categoryName=>{
+  if(record.username == "admin") {
+    console.log(getAdmin);
+} else {
   CategoryService.deleteCategory(categoryName).then((response) => {
   getAllCategories();
+  
 }).catch(error => {
   console.log(error)
 })
+  }
 })
+
 
 
   return (
